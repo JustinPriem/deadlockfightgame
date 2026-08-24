@@ -31,7 +31,8 @@ class MainMenuScene extends Phaser.Scene {
 
     this.options = [
       { label: '1) Lokal spielen (ein Keyboard, 2 Spieler)', action: () => this.scene.start('CharSelect') },
-      { label: '2) Online-Raum erstellen (Link teilen)', action: () => this.scene.start('OnlineLobby', { host: true }) }
+      { label: '2) Online-Raum erstellen (Link teilen)', action: () => this.scene.start('OnlineLobby', { host: true }) },
+      { label: '3) Item-Rätsel (Beta)', action: () => (location.href = 'itemguesser.html') }
     ];
     this.optionIndex = 0;
     this.optionTexts = this.options.map((o, i) =>
@@ -41,7 +42,7 @@ class MainMenuScene extends Phaser.Scene {
     );
 
     this.add
-      .text(W / 2, H - 40, 'Waehlen: W/S · Bestaetigen: ENTER   (oder direkt 1 / 2 druecken)', {
+      .text(W / 2, H - 40, 'Waehlen: W/S · Bestaetigen: ENTER   (oder direkt 1 / 2 / 3 druecken)', {
         fontFamily: 'monospace',
         fontSize: '12px',
         color: '#8877aa'
@@ -55,7 +56,8 @@ class MainMenuScene extends Phaser.Scene {
       s: 'S',
       enter: 'ENTER',
       one: 'ONE',
-      two: 'TWO'
+      two: 'TWO',
+      three: 'THREE'
     });
 
     this.highlight();
@@ -77,5 +79,6 @@ class MainMenuScene extends Phaser.Scene {
     if (Phaser.Input.Keyboard.JustDown(this.keys.enter)) this.options[this.optionIndex].action();
     if (Phaser.Input.Keyboard.JustDown(this.keys.one)) this.options[0].action();
     if (Phaser.Input.Keyboard.JustDown(this.keys.two)) this.options[1].action();
+    if (Phaser.Input.Keyboard.JustDown(this.keys.three)) this.options[2].action();
   }
 }

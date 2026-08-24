@@ -37,6 +37,12 @@ Bewegungstasten und bestätigen mit ihrer "Leichter Angriff"-Taste.
   bekommt den Zustand gespiegelt (host-authoritative, robust statt
   perfekt-latenzfrei)
 - Health-Bars, Rundentimer, K.O.- und Unentschieden-Erkennung, Rematch-Flow
+- **Item-Rätsel** (`itemguesser.html`, Menüpunkt 3): Wordle-artiges Ratespiel
+  auf Basis der Deadlock-Shop-Items (Kategorie, Preisstufe, Aktiv/Passiv,
+  Stichworte als Ampel-Feedback). Läuft komplett ohne Phaser (reines
+  HTML/CSS/JS-DOM), da sich Texteingabe + Tabellen dafür besser eignen als
+  ein Spiel-Canvas. **Aktuell mit Platzhalter-Items** — die echte
+  Item-Datenbank folgt noch (`src/itemguesser/items.js` einfach austauschen)
 - Kein Build-Schritt: reines HTML/CSS/JS + lokal eingebundenes Phaser 3 + PeerJS
 
 ## Tech-Stack
@@ -65,6 +71,9 @@ src/scenes/OnlineLobbyScene.js      Raum erstellen/beitreten
 src/scenes/OnlineCharSelectScene.js Heldenauswahl im Online-Modus
 src/scenes/FightScene.js            Kampf-Szene, HUD, Hitbox-Logik, Netcode
 src/main.js                         Phaser-Spielkonfiguration
+itemguesser.html                    Item-Rätsel (eigenstaendige Seite, kein Phaser)
+src/itemguesser/items.js            Item-Datenbank (aktuell Platzhalter)
+src/itemguesser/game.js             Rate-Logik + Ampel-Feedback-Vergleich
 ```
 
 ### Online-Modus: wie funktioniert das Netzwerk?
