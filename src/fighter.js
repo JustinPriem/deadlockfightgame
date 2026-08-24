@@ -1,19 +1,25 @@
 // Ein Fighter kapselt Physik-Koerper, Zustandsmaschine, Eingaben und Angriffe
 // eines Spielers waehrend eines Kampfes.
 class Fighter {
-  constructor(scene, x, y, heroData, controls, startFacing) {
+  // opts.noPhysics: fuer den Online-Gast, der nur ein "Puppet" rendert
+  // (Position kommt per Netzwerk vom Host) statt selbst zu simulieren.
+  constructor(scene, x, y, heroData, controls, startFacing, opts) {
+    opts = opts || {};
     this.scene = scene;
     this.hero = heroData;
     this.controls = controls;
     this.facing = startFacing;
     this.opponentRef = null;
+    this.isPuppet = !!opts.noPhysics;
 
-    // Koerper: einfaches farbiges Rechteck mit Arcade-Physik (kein Sprite-Asset noetig).
+    // Koerper: einfaches farbiges Rechteck (kein Sprite-Asset noetig).
     this.sprite = scene.add.rectangle(x, y, 56, 120, heroData.color).setStrokeStyle(3, 0x111116);
     this.sprite.setDepth(2);
-    scene.physics.add.existing(this.sprite);
-    this.sprite.body.setCollideWorldBounds(true);
-    this.sprite.body.setBounce(0);
+    if (!this.isPuppet) {
+      scene.physics.add.existing(this.sprite);
+      this.sprite.body.setCollideWorldBounds(true);
+      this.sprite.body.setBounce(0);
+    }
 
     // Kleiner Blickrichtungs-Marker (rein kosmetisch, keine Physik).
     this.marker = scene.add.rectangle(x, y, 10, 10, heroData.accentColor);
@@ -206,6 +212,19 @@ class Fighter {
       default:
         break;
     }
+  }
+
+  // Fuer den Online-Gast: uebernimmt den vom Host gesendeten Zustand 1:1,
+  // ohne eigene Physik/Zustandsmaschine laufen zu lassen.
+  applyRemoteState(d) {
+    this.sprite.x = d.x;
+    this.sprite.y = d.y;
+    this.facing = d.facing;
+    this.hp = d.hp;
+    this.state = d.state;
+    this.sprite.setAlpha(d.state === 'dead' ? 0.5 : d.state === 'block' ? 0.75 : 1);
+    this.marker.x = this.sprite.x + this.facing * 32;
+    this.marker.y = this.sprite.y - 40;
   }
 
   update(time) {

@@ -64,37 +64,15 @@ class CharSelectScene extends Phaser.Scene {
       p1Confirm: 'F',
       p2Left: 'LEFT',
       p2Right: 'RIGHT',
-      p2Confirm: 'K'
+      p2Confirm: 'K',
+      esc: 'ESC'
     });
 
     this.updateCursors();
   }
 
   buildCard(hero, x, y) {
-    const bg = this.add.rectangle(x, y, this.cardW, this.cardH, 0x1c1330).setStrokeStyle(2, 0x3a2a5c);
-    const swatch = this.add.rectangle(x, y - 50, 56, 100, hero.color).setStrokeStyle(2, 0x111116);
-    const name = this.add
-      .text(x, y + 42, hero.name, { fontFamily: 'monospace', fontSize: '16px', color: '#ffffff' })
-      .setOrigin(0.5);
-    const desc = this.add
-      .text(x, y + 66, hero.description, {
-        fontFamily: 'monospace',
-        fontSize: '9px',
-        color: '#9988bb',
-        align: 'center',
-        wordWrap: { width: this.cardW - 16 }
-      })
-      .setOrigin(0.5, 0);
-    const spec = this.add
-      .text(x, y + 98, 'Spezial: ' + hero.special.name, {
-        fontFamily: 'monospace',
-        fontSize: '9px',
-        color: '#ffcc66',
-        align: 'center',
-        wordWrap: { width: this.cardW - 16 }
-      })
-      .setOrigin(0.5, 0);
-    return { bg, swatch, name, desc, spec, x, y };
+    return buildHeroCard(this, hero, x, y, this.cardW, this.cardH);
   }
 
   updateCursors() {
@@ -112,6 +90,11 @@ class CharSelectScene extends Phaser.Scene {
   }
 
   update() {
+    if (Phaser.Input.Keyboard.JustDown(this.keys.esc)) {
+      this.scene.start('MainMenu');
+      return;
+    }
+
     if (!this.p1Confirmed) {
       if (Phaser.Input.Keyboard.JustDown(this.keys.p1Left)) {
         this.p1Index = (this.p1Index - 1 + HEROES.length) % HEROES.length;

@@ -25,3 +25,28 @@ function createControlReader(scene, scheme) {
     }
   };
 }
+
+const EMPTY_INPUT_STATE = {
+  left: false,
+  right: false,
+  up: false,
+  down: false,
+  light: false,
+  heavy: false,
+  special: false
+};
+
+// Liefert dieselbe {getState()}-Schnittstelle wie createControlReader, speist
+// sich aber aus Netzwerk-Nachrichten statt aus echten Tasten. Damit kann der
+// Host den entfernten Spieler genauso simulieren wie einen lokalen.
+function createRemoteControlReader() {
+  let latest = EMPTY_INPUT_STATE;
+  return {
+    setState(state) {
+      latest = state || EMPTY_INPUT_STATE;
+    },
+    getState() {
+      return latest;
+    }
+  };
+}

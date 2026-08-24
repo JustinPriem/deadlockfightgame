@@ -14,9 +14,11 @@ const config = {
       debug: false
     }
   },
-  scene: [CharSelectScene, FightScene]
+  scene: [MainMenuScene, CharSelectScene, OnlineLobbyScene, OnlineCharSelectScene, FightScene]
 };
 
 window.addEventListener('load', () => {
-  new Phaser.Game(config);
+  // Auf window abgelegt, um in der Browser-Konsole beim Debuggen leicht an
+  // die laufende Szene/den Spielzustand zu kommen (z.B. window.game.scene).
+  window.game = new Phaser.Game(config);
 });
