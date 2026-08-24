@@ -128,12 +128,14 @@
 <div class="wrap">
   <header>
     <h1>ITEM-RÄTSEL</h1>
-    <p class="subtitle">Errate das Deadlock-Shop-Item anhand von Kategorie, Preisstufe, Aktiv/Passiv und Stichworten.</p>
+    <p class="subtitle">Errate das Deadlock-Shop-Item anhand von Kategorie, Preisstufe, Anfangsbuchstabe und Wortanzahl.</p>
     <a class="backlink" href="index.html">← Zurück zur Deadlock Arena</a>
   </header>
 
   <div class="demo-banner">
-    ⚠️ Demo-Datensatz mit Platzhalter-Items — noch keine echten Deadlock-Werte. Wird bald durch die echte Item-Datenbank ersetzt.
+    ℹ️ ~170 echte Item-Namen, Kategorien und Preisstufen aus dem Deadlock-Shop. "Aktiv/Passiv" und Effekte fehlen
+    noch (dafür brauchen wir eine verlässliche Datenquelle) — als Ersatz-Hinweise dienen Anfangsbuchstabe und
+    Wortanzahl des Namens.
   </div>
 
   <form id="guess-form">
@@ -151,8 +153,8 @@
     <div class="cell name">Item</div>
     <div class="cell">Kategorie</div>
     <div class="cell">Tier</div>
-    <div class="cell">Aktiv/Passiv</div>
-    <div class="cell">Stichworte</div>
+    <div class="cell">Anfangsbuchstabe</div>
+    <div class="cell">Wortanzahl</div>
   </div>
   <div id="guess-rows"></div>
 

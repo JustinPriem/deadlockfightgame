@@ -38,11 +38,14 @@ Bewegungstasten und bestätigen mit ihrer "Leichter Angriff"-Taste.
   perfekt-latenzfrei)
 - Health-Bars, Rundentimer, K.O.- und Unentschieden-Erkennung, Rematch-Flow
 - **Item-Rätsel** (`itemguesser.html`, Menüpunkt 3): Wordle-artiges Ratespiel
-  auf Basis der Deadlock-Shop-Items (Kategorie, Preisstufe, Aktiv/Passiv,
-  Stichworte als Ampel-Feedback). Läuft komplett ohne Phaser (reines
-  HTML/CSS/JS-DOM), da sich Texteingabe + Tabellen dafür besser eignen als
-  ein Spiel-Canvas. **Aktuell mit Platzhalter-Items** — die echte
-  Item-Datenbank folgt noch (`src/itemguesser/items.js` einfach austauschen)
+  mit ~170 echten Deadlock-Shop-Items (Name, Kategorie, Preisstufe direkt aus
+  dem Deadlock-Wiki). Ampel-Feedback pro Versuch auf Kategorie, Tier
+  (höher/niedriger), Anfangsbuchstabe und Wortanzahl des Namens. Läuft
+  komplett ohne Phaser (reines HTML/CSS/JS-DOM), da sich Texteingabe +
+  Tabellen dafür besser eignen als ein Spiel-Canvas. "Aktiv/Passiv" und
+  Effekt-Stichworte fehlen bewusst noch — dafür bräuchten wir eine
+  verlässliche Datenquelle statt geratener Werte (`src/itemguesser/items.js`
+  ist eine einzelne, leicht erweiterbare Datei)
 - Kein Build-Schritt: reines HTML/CSS/JS + lokal eingebundenes Phaser 3 + PeerJS
 
 ## Tech-Stack

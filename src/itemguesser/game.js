@@ -2,7 +2,7 @@
 // ein Texteingabe-Raetsel ist mit normalem HTML/CSS einfacher und
 // zugaenglicher umzusetzen als in einem Spiel-Canvas.
 (function () {
-  const MAX_GUESSES = 8;
+  const MAX_GUESSES = 10; // grosser Item-Pool (~170) -> etwas mehr Versuche als ein klassisches Wordle
 
   let target = null;
   let guesses = [];
@@ -32,30 +32,35 @@
     return candidate;
   }
 
+  // Tier-Reihenfolge fuers Hoeher/Niedriger-Feedback. Legendary hat keinen
+  // festen Seelenpreis, wird fuers Raetsel aber als "hoechste Stufe" einsortiert.
+  const TIER_ORDER = [1, 2, 3, 4, 'Legendary'];
+
+  function compareTier(guessTier, targetTier) {
+    if (guessTier === targetTier) return 'match';
+    const gi = TIER_ORDER.indexOf(guessTier);
+    const ti = TIER_ORDER.indexOf(targetTier);
+    return ti > gi ? 'higher' : 'lower';
+  }
+
+  function firstLetter(name) {
+    return name.trim().charAt(0).toUpperCase();
+  }
+
+  function wordCount(name) {
+    return name.trim().split(/\s+/).length;
+  }
+
   function compareItems(guess, targetItem) {
     const result = {};
 
     result.category = guess.category === targetItem.category ? 'match' : 'diff';
+    result.tier = compareTier(guess.tier, targetItem.tier);
+    result.firstLetter = firstLetter(guess.name) === firstLetter(targetItem.name) ? 'match' : 'diff';
 
-    if (guess.tier === targetItem.tier) {
-      result.tier = 'match';
-    } else {
-      result.tier = targetItem.tier > guess.tier ? 'higher' : 'lower';
-    }
-
-    result.activeOrPassive = guess.activeOrPassive === targetItem.activeOrPassive ? 'match' : 'diff';
-
-    const guessTags = new Set(guess.tags);
-    const targetTags = new Set(targetItem.tags);
-    const overlap = [...guessTags].filter((t) => targetTags.has(t));
-    const sameSize = guessTags.size === targetTags.size;
-    if (overlap.length > 0 && overlap.length === guessTags.size && sameSize) {
-      result.tags = 'match';
-    } else if (overlap.length > 0) {
-      result.tags = 'partial';
-    } else {
-      result.tags = 'diff';
-    }
+    const gw = wordCount(guess.name);
+    const tw = wordCount(targetItem.name);
+    result.wordCount = gw === tw ? 'match' : tw > gw ? 'higher' : 'lower';
 
     return result;
   }
@@ -67,14 +72,23 @@
     return 'cell diff';
   }
 
+  function tierLabel(tier) {
+    return tier === 'Legendary' ? 'LEG' : 'T' + tier;
+  }
+
   function cellContent(field, kind, guess) {
     if (field === 'tier') {
-      if (kind === 'match') return 'T' + guess.tier + ' ✓';
-      return 'T' + guess.tier + (kind === 'higher' ? ' ▲' : ' ▼');
+      const label = tierLabel(guess.tier);
+      if (kind === 'match') return label + ' ✓';
+      return label + (kind === 'higher' ? ' ▲' : ' ▼');
     }
     if (field === 'category') return guess.category;
-    if (field === 'activeOrPassive') return guess.activeOrPassive;
-    if (field === 'tags') return guess.tags.join(', ');
+    if (field === 'firstLetter') return firstLetter(guess.name);
+    if (field === 'wordCount') {
+      const n = wordCount(guess.name);
+      const suffix = n === 1 ? ' Wort' : ' Woerter';
+      return n + suffix;
+    }
     return '';
   }
 
@@ -87,7 +101,7 @@
     nameCell.textContent = guess.name;
     row.appendChild(nameCell);
 
-    ['category', 'tier', 'activeOrPassive', 'tags'].forEach((field) => {
+    ['category', 'tier', 'firstLetter', 'wordCount'].forEach((field) => {
       const c = document.createElement('div');
       c.className = cellClass(cmp[field]);
       c.textContent = cellContent(field, cmp[field], guess);
